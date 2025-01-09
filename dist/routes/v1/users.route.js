@@ -9,7 +9,7 @@ const user_controller_1 = require("../../controllers/user.controller");
 const authentication_1 = require("../../middlewares/authentication");
 const prisma = new client_1.PrismaClient();
 const userRoute = express_1.default.Router();
-userRoute.get('/', authentication_1.authentication, user_controller_1.getAllUser);
+userRoute.get('/', user_controller_1.getAllUser);
 userRoute.put('/:id', user_controller_1.updateUser);
 userRoute.get('/:id', user_controller_1.getUserById);
 userRoute.get('/search', authentication_1.authentication, user_controller_1.searchUsers);
