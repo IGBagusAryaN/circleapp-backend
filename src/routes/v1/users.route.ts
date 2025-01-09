@@ -11,7 +11,7 @@ import { authentication } from '../../middlewares/authentication';
 const prisma = new PrismaClient();
 const userRoute = express.Router();
 
-userRoute.get('/', authentication, getAllUser);
+userRoute.get('/', getAllUser);
 userRoute.put('/:id', updateUser);
 userRoute.get('/:id', getUserById);
 userRoute.get('/search', authentication, searchUsers);
