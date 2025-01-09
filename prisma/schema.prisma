@@ -1,0 +1,100 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+model Thread {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+  content String
+  author User @relation(fields:[authorId], references: [id])
+  authorId Int
+  isDeleted Int @default(0)
+  like Like[]
+  reply Reply[]
+  profile Profile @relation(fields: [profileId], references: [id]) // Relasi langsung
+  profileId Int
+  image String?
+}
+
+model User {
+  id Int @id @default(autoincrement())
+  email String @unique
+  username String @unique
+  password String
+  profile Profile[]
+  like Like[]
+  threads Thread[]
+  reply Reply[]
+  followers Follow[] @relation("UserFollowers")
+  following Follow[] @relation("UserFollowings")
+}
+
+model Follow {
+  id Int @id @default(autoincrement())
+  followingId Int
+  followerId Int
+
+  createdAt DateTime @default(now())
+
+  follower User @relation("UserFollowers", fields: [followerId], references: [id])
+  following User @relation("UserFollowings", fields: [followingId], references: [id])
+  
+  @@unique([followerId, followingId],  map: "followerId_followingId")
+}
+
+model Like{
+  id Int @id @default(autoincrement())
+  userId Int
+  threadId Int
+  isDeleted Int @default(0)
+  createdAt DateTime @default(now())
+  deletedAt DateTime?
+
+
+  user User @relation(fields: [userId], references: [id])         
+  thread Thread @relation(fields: [threadId], references: [id])
+
+  @@unique([userId, threadId])
+}
+
+
+
+model Reply {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+  content String
+    image String?
+  thread Thread @relation(fields: [threadId], references: [id])
+  threadId Int
+  author User @relation(fields: [authorId], references: [id])
+  authorId Int
+  parent Reply? @relation("ReplyToReply", fields: [parentId], references: [id]) 
+  parentId Int? 
+  replies Reply[] @relation("ReplyToReply") 
+}
+
+model Profile{
+  id Int @id @default(autoincrement())
+  fullname String?
+  bio String?
+  profileImage String?
+  bannerImage String?
+  user User @relation(fields: [userId], references: [id])
+  userId Int @unique
+  thread Thread[]
+  createdAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+}
