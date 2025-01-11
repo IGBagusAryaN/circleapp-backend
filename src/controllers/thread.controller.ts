@@ -4,19 +4,42 @@ const prisma = new PrismaClient();
 
 export async function getAllThread(req: Request, res: Response) {
   try {
+    // Ambil userId dari middleware authentication
+    const userId = (req as any).user?.id;
     const filterByUser = req.query.filterByUser === 'true';
-    const userId = req.query.userId
-      ? parseInt(req.query.userId as string, 10)
-      : null;
+    const userIdOther = req.query.userId
+    ? parseInt(req.query.userId as string, 10)
+    : null;
 
-    if (filterByUser && userId && isNaN(userId)) {
-      return res.status(400).json({ message: 'Invalid userId provided' });
+    // Validasi userId
+    if (!userId) {
+      return res.status(400).json({ message: 'Invalid or missing userId' });
+    }
+
+    // Ambil daftar following ID
+    const following = await prisma.follow.findMany({
+      where: { followingId: userId },
+      select: { followerId: true },
+    });
+
+    console.log("Following IDs:", following);
+
+    const followingIds = following.map((follow) => follow.followerId);
+    console.log("Mapped Following IDs:", followingIds);
+    const allAuthorIds = [...followingIds, userId];
+
+    if (allAuthorIds.length === 0) {
+      return res.status(200).json({
+        message: 'No threads found',
+        threads: [],
+      });
     }
 
     const threads = await prisma.thread.findMany({
       where: {
         isDeleted: 0,
-        ...(filterByUser && userId && { authorId: userId }),
+        authorId: { in: allAuthorIds },
+        ...(filterByUser && userIdOther && { authorId: userIdOther }),
       },
       include: {
         profile: { select: { id: true, fullname: true, profileImage: true } },
@@ -25,7 +48,10 @@ export async function getAllThread(req: Request, res: Response) {
       orderBy: { createdAt: 'desc' },
     });
 
-    res.status(200).json({ message: 'Get threads successfully', threads });
+    return res.status(200).json({
+      message: 'Get threads successfully',
+      threads,
+    });
   } catch (error) {
     console.error('Error fetching threads:', error);
     res.status(500).json({ message: 'Error fetching threads', error });
