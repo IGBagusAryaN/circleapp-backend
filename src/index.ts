@@ -13,7 +13,7 @@ app.use('/api', router);
 
 app.get('/', (req, res) => {
   res.json({
-    message: 'bagus arya',
+    message: 'bagus aryaaaaaaaaaaaaa',
   });
 });
 
