@@ -8,7 +8,8 @@ const app = express();
 const port = process.env.PORT;
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({ origin: "https://circle-app-socialmedia.vercel.app" }));
+
 app.use('/api', router);
 
 app.get('/', (req, res) => {
