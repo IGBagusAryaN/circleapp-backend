@@ -45,6 +45,9 @@ export function upload(
       : multer({ storage, fileFilter }).fields(fields || []);
 
   return (req: Request, res: Response, next: NextFunction) => {
+      if (req.method === 'OPTIONS') {
+    return next(); // <--- penting! biar preflight lewat
+  }
     uploadMiddleware(req, res, (err) => {
       if (err instanceof MulterError || err) {
         return res.status(400).json({ message: err.message });

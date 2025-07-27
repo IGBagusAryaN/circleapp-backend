@@ -9,6 +9,10 @@ export function authentication(
   res: Response,
   next: NextFunction,
 ) {
+
+    if (req.method === 'OPTIONS') {
+    return next(); // <--- penting! biar preflight lewat
+  }
   const token = req.headers.authorization?.split(' ')[1];
 
   if (!token) {
