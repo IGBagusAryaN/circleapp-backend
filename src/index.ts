@@ -10,6 +10,13 @@ const port = process.env.PORT;
 app.use(cors({
   origin: ['http://localhost:3000', 'https://circle-app-socialmedia.vercel.app'],
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+
+app.options('*', cors({
+  origin: ['http://localhost:3000', 'https://circle-app-socialmedia.vercel.app'],
+  credentials: true,
 }));
 app.use(express.json());
 // app.use(cors({ origin: "https://circle-app-socialmedia.vercel.app" }));
