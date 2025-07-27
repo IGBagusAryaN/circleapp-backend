@@ -7,17 +7,16 @@ import path from 'path';
 const app = express();
 const port = process.env.PORT;
 
-app.use(cors({
+const corsOptions = {
   origin: ['http://localhost:3000', 'https://circle-app-socialmedia.vercel.app'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-}));
+};
 
-app.options('*', cors({
-  origin: ['http://localhost:3000', 'https://circle-app-socialmedia.vercel.app'],
-  credentials: true,
-}));
+// HARUS dideklarasikan sebelum semua route
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // <- penting untuk preflight
 app.use(express.json());
 // app.use(cors({ origin: "https://circle-app-socialmedia.vercel.app" }));
 
