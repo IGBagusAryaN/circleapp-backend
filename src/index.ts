@@ -8,10 +8,11 @@ const app = express();
 const port = process.env.PORT;
 
 const corsOptions = {
-  origin: ['http://localhost:3000', 'https://circle-app-socialmedia.vercel.app'],
+  // origin: ['http://localhost:3000', 'https://circle-app-socialmedia.vercel.app'],
+  origin: '*',
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  // methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  // allowedHeaders: ['Content-Type', 'Authorization'],
 };
 
 // HARUS dideklarasikan sebelum semua route
