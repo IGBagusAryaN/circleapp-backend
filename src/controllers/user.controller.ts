@@ -124,7 +124,7 @@ export const searchUsers = async (req: Request, res: Response) => {
 };
 
 export const getUserById = async (req: Request, res: Response) => {
-  console.log('Params:', req.params);
+  // console.log('Params:', req.params);
 
   const { id } = req.params;
 

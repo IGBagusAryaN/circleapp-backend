@@ -105,7 +105,7 @@ export async function updateProfile(req: Request, res: Response) {
 
     const files =
       (req.files as { [fieldname: string]: Express.Multer.File[] }) || {};
-    console.log('Files received:', files);
+    // console.log('Files received:', files);
 
     const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/jpg'];
 
@@ -125,8 +125,8 @@ export async function updateProfile(req: Request, res: Response) {
     const profileImage = files?.['profileImage']?.[0]?.path || null;
     const bannerImage = files?.['bannerImage']?.[0]?.path || null;
 
-    console.log('Profile Image Path:', profileImage);
-    console.log('Banner Image Path:', bannerImage);
+    // console.log('Profile Image Path:', profileImage);
+    // console.log('Banner Image Path:', bannerImage);
 
     if (username) {
       const existingUser = await prisma.user.findUnique({
@@ -172,7 +172,7 @@ export async function updateProfile(req: Request, res: Response) {
       });
     }
 
-    console.log('Updated Profile:', updatedProfile);
+    // console.log('Updated Profile:', updatedProfile);
 
     res.status(200).json({
       message: 'Profile updated successfully',
