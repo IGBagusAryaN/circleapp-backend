@@ -85,6 +85,6 @@ app.get('/', (req, res) => {
 
 
 // Start server
-server.listen(port, () => {
+app.listen(port, () => {
   console.log(`🚀 Server running on port ${port}`);
 });
