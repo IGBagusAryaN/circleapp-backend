@@ -1,35 +1,34 @@
 import express from 'express';
-import { createServer } from 'http';
-import { Server } from 'socket.io';
+// import { createServer } from 'http';
+// import { Server } from 'socket.io';
 import router from './routes/v2/index.route';
 import 'dotenv/config';
 import cors from 'cors';
-import path from 'path';
 
 const app = express();
 const port = process.env.PORT || 5000;
 
 // Buat server HTTP terpisah
-const server = createServer(app);
+// const server = createServer(app);
 
 // Setup socket.io
-const io = new Server(server, {
-  cors: {
-    origin: '*', // Ganti dengan frontend URL saat production
-    methods: ['GET', 'POST'],
-  },
-});
+// const io = new Server(server, {
+//   cors: {
+//     origin: '*', 
+//     methods: ['GET', 'POST'],
+//   },
+// });
 
-app.set('io', io);
+// app.set('io', io);
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 
-app.use((req, res, next) => {
-  (req as any).io = io;
-  next();
-});
+// app.use((req, res, next) => {
+//   (req as any).io = io;
+//   next();
+// });
 
 
 // Routes
